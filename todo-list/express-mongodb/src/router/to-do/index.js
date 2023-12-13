@@ -1,8 +1,14 @@
 import { Router } from "express";
+import dao from "../../database";
+
+const { Meetups, ToDo } = dao.models;
 
 const toDoRouter = Router();
 
-toDoRouter.get("/", (req, res) => {
+toDoRouter.get("/", async (req, res) => {
+  const meetups = await Meetups.find();
+  console.log(meetups);
+  
   res.send("Get list of to-do");
 });
 
