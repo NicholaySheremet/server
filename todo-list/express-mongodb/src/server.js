@@ -1,20 +1,15 @@
-import express from "express";
-import appRouter from "./router";
 import * as Promise from "bluebird";
+import bodyParser from "body-parser";
+import express from "express";
 import dao from "./database";
+import appRouter from "./router";
 import { serverPort } from "./settings";
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use("/", appRouter);
-
-/*
-app.listen(port, async () => {
-  await dao.connect();
-  console.log('dao', dao);
-
-  console.log(`App listening on port ${port}`);
-});*/
 
 Promise.all([dao.connect()]).then(() => {
   app.listen(serverPort, () =>
