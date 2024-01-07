@@ -1,5 +1,6 @@
 import { Router } from "express";
 import dao from "../../database";
+import { timeoutPromise } from "../../tools/timeoutPromise";
 
 const { ToDo } = dao.models;
 
@@ -7,6 +8,7 @@ const toDoRouter = Router();
 
 toDoRouter.post("/", async (req, res) => {
   console.log("POST To-Do");
+  await timeoutPromise(1);
   try {
     const {
       data: {
@@ -14,6 +16,8 @@ toDoRouter.post("/", async (req, res) => {
         finished = false,
       } = {},
     } = req.body;
+    console.log("POSTED DATA", req.body);
+    console.log("POSTED label & finished", label, finished);
     const createdToDo = await ToDo.create({ label, finished });
     res.json({ success: 1, data: createdToDo });
   } catch (error) {
@@ -24,6 +28,7 @@ toDoRouter.post("/", async (req, res) => {
 
 toDoRouter.get("/", async (req, res) => {
   console.log("GET To-Do");
+  await timeoutPromise(3);
   try {
     const toDoes = await ToDo.find();
     res.json({ success: 1, data: toDoes });
@@ -34,7 +39,8 @@ toDoRouter.get("/", async (req, res) => {
 });
 
 toDoRouter.get("/:id", async (req, res) => {
-  console.log("GET To-Do", req.params?.id);
+  console.log("GET To-Do by ID", req.params?.id);
+  await timeoutPromise(3);
   try {
     const { id } = req.params;
     const toDo = await ToDo.findById(id);
@@ -46,7 +52,8 @@ toDoRouter.get("/:id", async (req, res) => {
 });
 
 toDoRouter.post("/:id", async (req, res) => {
-  console.log("POST To-Do", req.params?.id);
+  console.log("UPDATE To-Do by ID", req.params?.id);
+  await timeoutPromise(1);
   try {
     const { id } = req.params;
     const {
@@ -68,7 +75,8 @@ toDoRouter.post("/:id", async (req, res) => {
 });
 
 toDoRouter.delete("/:id", async (req, res) => {
-  console.log("DELETE To-Do", req.params?.id);
+  await timeoutPromise(2);
+  console.log("DELETE To-Do by ID", req.params?.id);
   try {
     const { id } = req.params;
     const deletedToDo = await ToDo.findById(id).deleteOne();
