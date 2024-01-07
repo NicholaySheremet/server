@@ -6,6 +6,7 @@ const { ToDo } = dao.models;
 const toDoRouter = Router();
 
 toDoRouter.post("/", async (req, res) => {
+  console.log("POST To-Do");
   try {
     const {
       data: {
@@ -22,6 +23,7 @@ toDoRouter.post("/", async (req, res) => {
 });
 
 toDoRouter.get("/", async (req, res) => {
+  console.log("GET To-Do");
   try {
     const toDoes = await ToDo.find();
     res.json({ success: 1, data: toDoes });
@@ -32,6 +34,7 @@ toDoRouter.get("/", async (req, res) => {
 });
 
 toDoRouter.get("/:id", async (req, res) => {
+  console.log("GET To-Do", req.params?.id);
   try {
     const { id } = req.params;
     const toDo = await ToDo.findById(id);
@@ -43,6 +46,7 @@ toDoRouter.get("/:id", async (req, res) => {
 });
 
 toDoRouter.post("/:id", async (req, res) => {
+  console.log("POST To-Do", req.params?.id);
   try {
     const { id } = req.params;
     const {
@@ -64,6 +68,7 @@ toDoRouter.post("/:id", async (req, res) => {
 });
 
 toDoRouter.delete("/:id", async (req, res) => {
+  console.log("DELETE To-Do", req.params?.id);
   try {
     const { id } = req.params;
     const deletedToDo = await ToDo.findById(id).deleteOne();
